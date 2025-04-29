@@ -29,8 +29,9 @@
                     Chi tiết Liên hệ
                     <i class="fas fa-address-card"></i>
                 </h4>
-        
+
                 <ContactCard :contact="activeContact" />
+
                 <router-link :to="{
                     name: 'contact.edit',
                     params: { id: activeContact._id },
@@ -39,22 +40,30 @@
                         <i class="fas fa-edit"></i> Hiệu chỉnh
                     </span>
                 </router-link>
+
+                <!-- Nút Thêm mới dưới thẻ ContactCard -->
+                <router-link :to="{ name: 'contact.add' }">
+                    <button class="btn btn-sm btn-success mt-2">
+                        <i class="fas fa-plus"></i> Thêm mới
+                    </button>
+                </router-link>
             </div>
         </div>
     </div>
 </template>
+
 <script>
 import ContactCard from "@/components/ContactCard.vue";
 import InputSearch from "@/components/InputSearch.vue";
 import ContactList from "@/components/ContactList.vue";
 import ContactService from "@/services/contact.service";
+
 export default {
     components: {
         ContactCard,
         InputSearch,
         ContactList,
     },
-    // Đoạn mã xử lý đầy đủ sẽ trình bày bên dưới
     data() {
         return {
             contacts: [],
@@ -63,21 +72,17 @@ export default {
         };
     },
     watch: {
-        // Giám sát các thay đổi của biến searchText.
-        // Bỏ chọn phần tử đang được chọn trong danh sách.
         searchText() {
             this.activeIndex = -1;
         },
     },
     computed: {
-        // Chuyển các đối tượng contact thành chuỗi để tiện cho tìm kiếm.
         contactStrings() {
             return this.contacts.map((contact) => {
                 const { name, email, address, phone } = contact;
                 return [name, email, address, phone].join("");
             });
         },
-        // Trả về các contact có chứa thông tin cần tìm kiếm.
         filteredContacts() {
             if (!this.searchText) return this.contacts;
             return this.contacts.filter((_contact, index) =>
@@ -114,7 +119,6 @@ export default {
                 }
             }
         },
-    
         goToAddContact() {
             this.$router.push({ name: "contact.add" });
         },
@@ -130,5 +134,4 @@ export default {
     text-align: left;
     max-width: 750px;
 }
-
 </style>
